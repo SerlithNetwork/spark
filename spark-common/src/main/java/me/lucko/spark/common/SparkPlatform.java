@@ -62,6 +62,7 @@ import me.lucko.spark.common.util.log.SparkStaticLogger;
 import me.lucko.spark.common.ws.TrustedKeyStore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -85,7 +86,6 @@ import java.util.stream.Stream;
 
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.GOLD;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
@@ -98,6 +98,8 @@ public class SparkPlatform {
 
     /** The date time formatter instance used by the platform */
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss");
+
+    private static final TextColor COLOR_TITLE = TextColor.color(254, 170, 231);
 
     private final SparkPlugin plugin;
     private final TemporaryFiles temporaryFiles;
@@ -526,7 +528,7 @@ public class SparkPlatform {
                     String subCommandUsage = usage + " " + subCommand;
 
                     sender.reply(text()
-                            .append(text(">", GOLD, BOLD))
+                            .append(text(">", COLOR_TITLE, BOLD))
                             .append(space())
                             .append(text().content(subCommandUsage).color(GRAY).clickEvent(ClickEvent.suggestCommand(subCommandUsage)).build())
                             .build()
@@ -541,7 +543,7 @@ public class SparkPlatform {
                 });
             } else {
                 sender.reply(text()
-                        .append(text(">", GOLD, BOLD))
+                        .append(text(">", COLOR_TITLE, BOLD))
                         .append(space())
                         .append(text().content(usage).color(GRAY).clickEvent(ClickEvent.suggestCommand(usage)).build())
                         .build()

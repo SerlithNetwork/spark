@@ -35,6 +35,7 @@ import me.lucko.spark.common.util.FormatUtil;
 import me.lucko.spark.common.util.MediaTypes;
 import me.lucko.spark.proto.SparkHeapProtos;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,12 +48,13 @@ import java.util.function.LongConsumer;
 import java.util.logging.Level;
 
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.GOLD;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
-import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 
 public class HeapAnalysisModule implements CommandModule {
+
+    private static final TextColor COLOR_TITLE = TextColor.color(254, 170, 231);
+    private static final TextColor COLOR_DATA = TextColor.color(155, 255, 255);
 
     @Override
     public void registerCommands(Consumer<Command> consumer) {
@@ -100,7 +102,7 @@ public class HeapAnalysisModule implements CommandModule {
                 String key = platform.getBytebinClient().postContent(output, MediaTypes.SPARK_HEAP_MEDIA_TYPE).key();
                 String url = platform.getViewerUrl() + key;
 
-                resp.broadcastPrefixed(text("Heap dump summmary output:", GOLD));
+                resp.broadcastPrefixed(text("Heap dump summmary output:", COLOR_TITLE));
                 resp.broadcast(text()
                         .content(url)
                         .color(GRAY)
@@ -123,7 +125,7 @@ public class HeapAnalysisModule implements CommandModule {
 
                 resp.broadcastPrefixed(text()
                         .content("Heap dump summary written to: ")
-                        .color(GOLD)
+                        .color(COLOR_TITLE)
                         .append(text(file.toString(), GRAY))
                         .build()
                 );
@@ -160,7 +162,7 @@ public class HeapAnalysisModule implements CommandModule {
 
         resp.broadcastPrefixed(text()
                 .content("Heap dump written to: ")
-                .color(GOLD)
+                .color(COLOR_TITLE)
                 .append(text(file.toString(), GRAY))
                 .build()
         );
@@ -201,11 +203,11 @@ public class HeapAnalysisModule implements CommandModule {
                     resp.broadcastPrefixed(text()
                             .color(GRAY)
                             .append(text("Compressed "))
-                            .append(text(FormatUtil.formatBytes(progress), GOLD))
+                            .append(text(FormatUtil.formatBytes(progress), COLOR_TITLE))
                             .append(text(" / "))
-                            .append(text(FormatUtil.formatBytes(size), GOLD))
+                            .append(text(FormatUtil.formatBytes(size), COLOR_TITLE))
                             .append(text(" so far... ("))
-                            .append(text(FormatUtil.percent(progress, size), GREEN))
+                            .append(text(FormatUtil.percent(progress, size), COLOR_DATA))
                             .append(text(")"))
                             .build()
                     );
@@ -219,18 +221,18 @@ public class HeapAnalysisModule implements CommandModule {
         resp.broadcastPrefixed(text()
                 .color(GRAY)
                 .append(text("Compression complete: "))
-                .append(text(FormatUtil.formatBytes(size), GOLD))
+                .append(text(FormatUtil.formatBytes(size), COLOR_TITLE))
                 .append(text(" --> "))
-                .append(text(FormatUtil.formatBytes(compressedSize), GOLD))
+                .append(text(FormatUtil.formatBytes(compressedSize), COLOR_TITLE))
                 .append(text(" ("))
-                .append(text(FormatUtil.percent(compressedSize, size), GREEN))
+                .append(text(FormatUtil.percent(compressedSize, size), COLOR_DATA))
                 .append(text(")"))
                 .build()
         );
 
         resp.broadcastPrefixed(text()
                 .content("Compressed heap dump written to: ")
-                .color(GOLD)
+                .color(COLOR_TITLE)
                 .append(text(compressedFile.toString(), GRAY))
                 .build()
         );

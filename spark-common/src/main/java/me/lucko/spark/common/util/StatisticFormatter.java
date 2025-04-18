@@ -4,7 +4,7 @@
  *  Copyright (c) lucko (Luck) <luck@lucko.me>
  *  Copyright (c) contributors
  *
- *  This program is free software: you can redistribute it and/or modify
+ *  This program is free software: you can COLOR_HEALTH_BADistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
@@ -32,9 +32,6 @@ import java.util.Locale;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.DARK_GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
-import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
-import static net.kyori.adventure.text.format.NamedTextColor.RED;
-import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
 
 public enum StatisticFormatter {
     ;
@@ -42,14 +39,18 @@ public enum StatisticFormatter {
     private static final String BAR_TRUE_CHARACTER = "┃";
     private static final String BAR_FALSE_CHARACTER = "╻";
 
+    private static final TextColor COLOR_HEALTH_GOOD = TextColor.color(155, 255, 255);
+    private static final TextColor COLOR_HEALTH_MEDIUM = TextColor.color(255, 190, 0);
+    private static final TextColor COLOR_HEALTH_BAD = TextColor.color(255, 20, 20);
+
     public static TextComponent formatTps(double tps) {
         TextColor color;
         if (tps > 18.0) {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         } else if (tps > 16.0) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         }
 
         return text((tps > 20.0 ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0), color);
@@ -70,11 +71,11 @@ public enum StatisticFormatter {
     public static TextComponent formatTickDuration(double duration) {
         TextColor color;
         if (duration >= 50d) {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         } else if (duration >= 40d) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         }
 
         return text(String.format(Locale.ENGLISH, "%.1f", duration), color);
@@ -83,11 +84,11 @@ public enum StatisticFormatter {
     public static TextComponent formatCpuUsage(double usage) {
         TextColor color;
         if (usage > 0.9) {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         } else if (usage > 0.65) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         }
 
         return text(FormatUtil.percent(usage, 1d), color);
@@ -108,11 +109,11 @@ public enum StatisticFormatter {
     public static TextComponent formatPingRtt(double ping) {
         TextColor color;
         if (ping >= 200) {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         } else if (ping >= 100) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         }
 
         return text((int) Math.ceil(ping), color);
@@ -126,10 +127,10 @@ public enum StatisticFormatter {
         int usedChars = (int) ((used * length) / max);
         int committedChars = (int) ((committed * length) / max);
 
-        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, usedChars)).color(YELLOW);
+        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, usedChars)).color(COLOR_HEALTH_MEDIUM);
         if (committedChars > usedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (committedChars - usedChars) - 1), GRAY));
-            line.append(Component.text(BAR_FALSE_CHARACTER, RED));
+            line.append(Component.text(BAR_FALSE_CHARACTER, COLOR_HEALTH_BAD));
         }
         if (length > committedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (length - committedChars)), GRAY));
@@ -155,15 +156,15 @@ public enum StatisticFormatter {
         int collectionUsedChars = (int) ((collectionUsed * length) / max);
         int committedChars = (int) ((committed * length) / max);
 
-        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, collectionUsedChars)).color(YELLOW);
+        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, collectionUsedChars)).color(COLOR_HEALTH_MEDIUM);
 
         if (usedChars > collectionUsedChars) {
-            line.append(Component.text(BAR_TRUE_CHARACTER, RED));
-            line.append(text(Strings.repeat(BAR_TRUE_CHARACTER, (usedChars - collectionUsedChars) - 1), YELLOW));
+            line.append(Component.text(BAR_TRUE_CHARACTER, COLOR_HEALTH_BAD));
+            line.append(text(Strings.repeat(BAR_TRUE_CHARACTER, (usedChars - collectionUsedChars) - 1), COLOR_HEALTH_MEDIUM));
         }
         if (committedChars > usedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (committedChars - usedChars) - 1), GRAY));
-            line.append(Component.text(BAR_FALSE_CHARACTER, YELLOW));
+            line.append(Component.text(BAR_FALSE_CHARACTER, COLOR_HEALTH_MEDIUM));
         }
         if (length > committedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (length - committedChars)), GRAY));
@@ -181,7 +182,7 @@ public enum StatisticFormatter {
         int freeChars = length - usedChars;
         return text()
                 .append(text("[", DARK_GRAY))
-                .append(text(Strings.repeat(BAR_TRUE_CHARACTER, usedChars), YELLOW))
+                .append(text(Strings.repeat(BAR_TRUE_CHARACTER, usedChars), COLOR_HEALTH_MEDIUM))
                 .append(text(Strings.repeat(BAR_FALSE_CHARACTER, freeChars), GRAY))
                 .append(text("]", DARK_GRAY))
                 .build();

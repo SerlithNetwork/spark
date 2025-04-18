@@ -25,6 +25,7 @@ import me.lucko.spark.common.SparkPlatform;
 import me.lucko.spark.common.monitor.memory.GarbageCollectionMonitor;
 import me.lucko.spark.common.tick.TickHook;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.text.DecimalFormat;
 import java.util.DoubleSummaryStatistics;
@@ -32,7 +33,6 @@ import java.util.DoubleSummaryStatistics;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.DARK_GRAY;
-import static net.kyori.adventure.text.format.NamedTextColor.GOLD;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
@@ -42,6 +42,8 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
  */
 public abstract class TickMonitor implements TickHook.Callback, GarbageCollectionMonitor.Listener, AutoCloseable {
     private static final DecimalFormat DF = new DecimalFormat("#.##");
+
+    private static final TextColor COLOR_TITLE = TextColor.color(254, 170, 231);
 
     /** The spark platform */
     private final SparkPlatform platform;
@@ -135,7 +137,7 @@ public abstract class TickMonitor implements TickHook.Callback, GarbageCollectio
             // move onto the next state
             if (this.averageTickTimeCalc.getCount() >= 120) {
                 this.platform.getPlugin().executeAsync(() -> {
-                    sendMessage(text("Analysis is now complete.", GOLD));
+                    sendMessage(text("Analysis is now complete.", COLOR_TITLE));
                     sendMessage(text()
                             .color(GRAY)
                             .append(text(">", WHITE))
@@ -181,10 +183,10 @@ public abstract class TickMonitor implements TickHook.Callback, GarbageCollectio
                             .append(text("Tick "))
                             .append(text("#" + getCurrentTick(), DARK_GRAY))
                             .append(text(" lasted "))
-                            .append(text(DF.format(tickDuration), GOLD))
+                            .append(text(DF.format(tickDuration), COLOR_TITLE))
                             .append(text(" ms. "))
                             .append(text("("))
-                            .append(text(DF.format(percentageChange) + "%", GOLD))
+                            .append(text(DF.format(percentageChange) + "%", COLOR_TITLE))
                             .append(text(" increase from avg)"))
                             .build()
                     );
@@ -209,7 +211,7 @@ public abstract class TickMonitor implements TickHook.Callback, GarbageCollectio
                     .append(text(" included "))
                     .append(text("GC", RED))
                     .append(text(" lasting "))
-                    .append(text(DF.format(data.getGcInfo().getDuration()), GOLD))
+                    .append(text(DF.format(data.getGcInfo().getDuration()), COLOR_TITLE))
                     .append(text(" ms. (type = " + GarbageCollectionMonitor.getGcType(data) + ")"))
                     .build()
             );

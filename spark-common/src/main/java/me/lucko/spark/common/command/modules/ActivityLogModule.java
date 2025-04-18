@@ -30,6 +30,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.feature.pagination.Pagination;
 import net.kyori.adventure.text.feature.pagination.Pagination.Renderer;
 import net.kyori.adventure.text.feature.pagination.Pagination.Renderer.RowRenderer;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,13 +41,14 @@ import static me.lucko.spark.common.command.CommandResponseHandler.applyPrefix;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.DARK_GRAY;
-import static net.kyori.adventure.text.format.NamedTextColor.GOLD;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
 
 public class ActivityLogModule implements CommandModule, RowRenderer<Activity> {
+
+    private static final TextColor COLOR_TITLE = TextColor.color(254, 170, 231);
 
     private final Pagination.Builder pagination = Pagination.builder()
             .width(45)
@@ -115,7 +117,7 @@ public class ActivityLogModule implements CommandModule, RowRenderer<Activity> {
                     int page = Math.max(1, arguments.intFlag("page"));
 
                     Pagination<Activity> activityPagination = this.pagination.build(
-                            text("Recent spark activity", GOLD),
+                            text("Recent spark activity", COLOR_TITLE),
                             this,
                             value -> "/" + platform.getPlugin().getCommandName() + " activity --page " + value
                     );

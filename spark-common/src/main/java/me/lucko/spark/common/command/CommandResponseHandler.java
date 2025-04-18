@@ -25,6 +25,7 @@ import me.lucko.spark.common.command.sender.CommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class CommandResponseHandler {
     private static final TextComponent PREFIX = text()
             .color(GRAY)
             .append(text("[", DARK_GRAY))
-            .append(text("⚡", YELLOW, BOLD))
+            .append(text("⚡", TextColor.color(180, 140, 255), BOLD))
             .append(text("]", DARK_GRAY))
             .append(text(" "))
             .build();
