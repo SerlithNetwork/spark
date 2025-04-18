@@ -28,7 +28,7 @@ blossom {
 }
 
 shadowJar {
-    archiveFileName = "spark-${project.pluginVersion}-aurora.jar"
+    archiveFileName = "spark-${project.pluginVersion}-serlith.jar"
     archiveClassifier = ''
 
     dependencies {
@@ -70,7 +70,7 @@ publishing {
     publications {
         shadow(MavenPublication) { publication ->
             project.shadow.component(publication)
-            version = "${project.pluginVersion}-AURORA"
+            version = "${project.pluginVersion}-SERLITH"
         }
     }
 }

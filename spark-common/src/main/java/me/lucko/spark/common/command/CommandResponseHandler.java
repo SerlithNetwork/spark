@@ -44,7 +44,7 @@ public class CommandResponseHandler {
     private static final TextComponent PREFIX = text()
             .color(GRAY)
             .append(text("[", DARK_GRAY))
-            .append(text("⚡", TextColor.color(180, 140, 255), BOLD))
+            .append(text("\uD83C\uDF00", TextColor.color(180, 140, 255), BOLD))
             .append(text("]", DARK_GRAY))
             .append(text(" "))
             .build();

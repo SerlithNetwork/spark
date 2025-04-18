@@ -161,7 +161,7 @@ public class SamplerModule implements CommandModule {
         if (previousSampler != null) {
             if (previousSampler.isRunningInBackground()) {
                 // there is a background profiler running - stop that first
-                resp.replyPrefixed(text("Stopping the background profiler before starting... please wait"));
+                resp.replyPrefixed(text("Stopping the background profiler before starting..."));
                 previousSampler.stop(true);
                 platform.getSamplerContainer().unsetActiveSampler(previousSampler);
             } else {
@@ -430,9 +430,9 @@ public class SamplerModule implements CommandModule {
                 String url = platform.getViewerUrl() + key;
 
                 resp.broadcastPrefixed(text("Profiler stopped & upload complete!", COLOR_TITLE));
-                resp.broadcast(text()
+                resp.broadcastPrefixed(text()
                         .content(url)
-                        .color(GRAY)
+                        .color(WHITE)
                         .clickEvent(ClickEvent.openUrl(url))
                         .build()
                 );
