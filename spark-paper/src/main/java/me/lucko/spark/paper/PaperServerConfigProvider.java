@@ -129,7 +129,8 @@ public class PaperServerConfigProvider extends ServerConfigProvider {
                 .put("paper.yml", YamlConfigParser.INSTANCE)
                 .put("paper/", SplitYamlConfigParser.INSTANCE)
                 .put("purpur.yml", YamlConfigParser.INSTANCE)
-                .put("pufferfish.yml", YamlConfigParser.INSTANCE);
+                .put("pufferfish.yml", YamlConfigParser.INSTANCE)
+                .put("aurora.yml", YamlConfigParser.INSTANCE);
 
         for (String config : getSystemPropertyList("spark.serverconfigs.extra")) {
             files.put(config, YamlConfigParser.INSTANCE);

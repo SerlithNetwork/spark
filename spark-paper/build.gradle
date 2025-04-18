@@ -28,7 +28,7 @@ blossom {
 }
 
 shadowJar {
-    archiveFileName = "spark-${project.pluginVersion}-paper.jar"
+    archiveFileName = "spark-${project.pluginVersion}-aurora.jar"
     archiveClassifier = ''
 
     dependencies {
@@ -57,7 +57,7 @@ artifacts {
 }
 
 publishing {
-    //repositories {
+    repositories {
     //    maven {
     //        url = 'https://oss.sonatype.org/content/repositories/snapshots'
     //        credentials {
@@ -65,11 +65,12 @@ publishing {
     //            password = sonatypePassword
     //        }
     //    }
-    //}
+        mavenLocal()
+    }
     publications {
         shadow(MavenPublication) { publication ->
             project.shadow.component(publication)
-            version = "${project.pluginVersion}-SNAPSHOT"
+            version = "${project.pluginVersion}-AURORA"
         }
     }
 }
