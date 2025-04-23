@@ -14,6 +14,12 @@
 * [**Downloads**](https://spark.lucko.me/download) - latest plugin/mod downloads
 
 
+## Compiling
+To compile and publish into local Maven repository, use the following command.
+```shell
+./gradlew clean build publishToMavenLocal
+```
+
 ## What does spark do?
 
 spark is made up of three separate components:
