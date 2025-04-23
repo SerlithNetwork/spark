@@ -389,7 +389,8 @@ public class SparkPlatform {
         // schedule a task to detect timeouts
         this.plugin.executeAsync(() -> {
             timeoutThread.set(Thread.currentThread());
-            int warningIntervalSeconds = 5;
+            int warningIntervalSeconds = 10; // Aurora - Some reports take a bit more time
+            int warningIntervalSecondsIterable = 10; // Aurora
 
             try {
                 if (completed.get()) {
@@ -398,7 +399,7 @@ public class SparkPlatform {
                 
                 for (int i = 1; i <= 3; i++) {
                     try {
-                        Thread.sleep(warningIntervalSeconds * 1000);
+                        Thread.sleep(warningIntervalSecondsIterable * 1000); // Use iterable
                     } catch (InterruptedException e) {
                         // ignore
                     }
@@ -406,11 +407,12 @@ public class SparkPlatform {
                     if (completed.get()) {
                         return;
                     }
+                    warningIntervalSecondsIterable = 5;
 
                     Thread executor = executorThread.get();
                     if (executor == null) {
                         getPlugin().log(Level.WARNING, "A command execution has not completed after " +
-                                (i * warningIntervalSeconds) + " seconds but there is no executor present. Perhaps the executor shutdown?");
+                                (warningIntervalSeconds + ((i - 1) * warningIntervalSecondsIterable)) + " seconds but there is no executor present. Perhaps the executor shutdown?");
                         getPlugin().log(Level.WARNING, "If the command subsequently completes without any errors, this warning should be ignored. :)");
 
                     } else {
@@ -419,7 +421,7 @@ public class SparkPlatform {
                                 .collect(Collectors.joining("\n"));
 
                         getPlugin().log(Level.WARNING, "A command execution has not completed after " +
-                                (i * warningIntervalSeconds) + " seconds, it *might* be stuck. Trace: \n" + stackTrace);
+                                (warningIntervalSeconds + ((i - 1) * warningIntervalSecondsIterable)) + " seconds, it *might* be stuck. Trace: \n" + stackTrace);
                         getPlugin().log(Level.WARNING, "If the command subsequently completes without any errors, this warning should be ignored. :)");
                     }
                 }
