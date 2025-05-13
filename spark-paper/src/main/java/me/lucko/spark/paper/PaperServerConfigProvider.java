@@ -142,6 +142,8 @@ public class PaperServerConfigProvider extends ServerConfigProvider {
                 .add("settings.bungeecord-addresses")
                 .add("settings.velocity-support.secret")
                 .add("proxies.velocity.secret")
+                .add("web-services.token")
+                .add("sentry-dsn")
                 .add("server-ip")
                 .add("motd")
                 .add("resource-pack")
@@ -152,8 +154,6 @@ public class PaperServerConfigProvider extends ServerConfigProvider {
                 .add("world-settings.*.seed-*")
                 .add("feature-seeds")
                 .add("seed-*")
-                .add("web-services.token")
-                .add("sentry-dsn")
                 .addAll(getSystemPropertyList("spark.serverconfigs.hiddenpaths"));
 
         FILES = files.build();
