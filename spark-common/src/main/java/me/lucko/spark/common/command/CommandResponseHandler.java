@@ -22,6 +22,7 @@ package me.lucko.spark.common.command;
 
 import me.lucko.spark.common.SparkPlatform;
 import me.lucko.spark.common.command.sender.CommandSender;
+import me.lucko.spark.common.platform.PlatformInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
@@ -68,6 +69,21 @@ public class CommandResponseHandler {
         return this.senderData;
     }
 
+    private void sendMessage(CommandSender sender, Component message) {
+        if (sender == null) {
+            return;
+        }
+
+        if (this.platform.getPlugin().getPlatformInfo().getType() == PlatformInfo.Type.CLIENT) {
+            // send message on the client render thread
+            this.platform.getPlugin().executeSync(() -> {
+                sender.sendMessage(message);
+            });
+        } else {
+            sender.sendMessage(message);
+        }
+    }
+
     public void allSenders(Consumer<? super CommandSender> action) {
         if (this.commandPrimaryAlias == null) {
             throw new IllegalStateException("Command alias has not been set!");
@@ -86,10 +102,7 @@ public class CommandResponseHandler {
     }
 
     public void reply(Component message) {
-        CommandSender sender = this.sender.get();
-        if (sender != null) {
-            sender.sendMessage(message);
-        }
+        sendMessage(this.sender.get(), message);
     }
 
     public void reply(Iterable<Component> message) {
@@ -99,7 +112,7 @@ public class CommandResponseHandler {
 
     public void broadcast(Component message) {
         if (this.platform.shouldBroadcastResponse()) {
-            allSenders(sender -> sender.sendMessage(message));
+            allSenders(sender -> sendMessage(sender, message));
         } else {
             reply(message);
         }
@@ -108,7 +121,7 @@ public class CommandResponseHandler {
     public void broadcast(Iterable<Component> message) {
         if (this.platform.shouldBroadcastResponse()) {
             Component joinedMsg = Component.join(JoinConfiguration.separator(Component.newline()), message);
-            allSenders(sender -> sender.sendMessage(joinedMsg));
+            allSenders(sender -> sendMessage(sender, joinedMsg));
         } else {
             reply(message);
         }
