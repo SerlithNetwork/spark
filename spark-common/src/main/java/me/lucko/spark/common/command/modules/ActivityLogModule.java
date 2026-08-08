@@ -47,6 +47,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
 
 public class ActivityLogModule implements CommandModule, RowRenderer<Activity> {
+    private static final net.kyori.adventure.text.format.TextColor COLOR_TITLE = net.kyori.adventure.text.format.TextColor.color(255, 170, 230);
 
     private final Pagination.Builder pagination = Pagination.builder()
             .width(45)
@@ -115,7 +116,7 @@ public class ActivityLogModule implements CommandModule, RowRenderer<Activity> {
                     int page = Math.max(1, arguments.intFlag("page"));
 
                     Pagination<Activity> activityPagination = this.pagination.build(
-                            text("Recent spark activity", GOLD),
+                            text("Recent spark activity", COLOR_TITLE),
                             this,
                             value -> "/" + platform.getPlugin().getCommandName() + " activity --page " + value
                     );
