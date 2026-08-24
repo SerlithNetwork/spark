@@ -77,6 +77,9 @@ import static net.kyori.adventure.text.format.NamedTextColor.WHITE;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
 
 public class HealthModule implements CommandModule {
+    private static final net.kyori.adventure.text.format.TextColor COLOR_HEALTH_GOOD = net.kyori.adventure.text.format.TextColor.color(155, 255, 255);
+    private static final net.kyori.adventure.text.format.TextColor COLOR_HEALTH_BAD = net.kyori.adventure.text.format.TextColor.color(255, 20, 20);
+    private static final net.kyori.adventure.text.format.TextColor COLOR_TITLE = net.kyori.adventure.text.format.TextColor.color(255, 170, 230);
 
     @Override
     public void registerCommands(Consumer<Command> consumer) {
@@ -283,7 +286,7 @@ public class HealthModule implements CommandModule {
             String key = platform.getBytebinClient().postContent(data.build(), MediaTypes.SPARK_HEALTH_MEDIA_TYPE).key();
             String url = platform.getViewerUrl() + key;
 
-            resp.broadcastPrefixed(text("Health Report:", GOLD));
+            resp.broadcastPrefixed(text("Health Report:", COLOR_TITLE));
             resp.broadcast(text()
                     .content(url)
                     .color(GRAY)
@@ -292,7 +295,7 @@ public class HealthModule implements CommandModule {
             );
             platform.getActivityLog().addToLog(Activity.urlActivity(resp.senderData(), System.currentTimeMillis(), "Health report", url));
         } catch (Exception e) {
-            resp.broadcastPrefixed(text("An error occurred whilst uploading the data.", RED));
+            resp.broadcastPrefixed(text("An error occurred whilst uploading the data.", COLOR_HEALTH_BAD));
             platform.getPlugin().log(Level.SEVERE, "An error occurred whilst uploading data", e);
         }
     }
@@ -301,7 +304,7 @@ public class HealthModule implements CommandModule {
         report.add(text()
                 .append(text(">", DARK_GRAY, BOLD))
                 .append(space())
-                .append(text("TPS from last 5s, 10s, 1m, 5m, 15m:", GOLD))
+                .append(text("TPS from last 5s, 10s, 1m, 5m, 15m:", COLOR_TITLE))
                 .build()
         );
         report.add(text()
@@ -319,7 +322,7 @@ public class HealthModule implements CommandModule {
             report.add(text()
                     .append(text(">", DARK_GRAY, BOLD))
                     .append(space())
-                    .append(text("Tick durations (min/med/95%ile/max ms) from last 10s, 1m:", GOLD))
+                    .append(text("Tick durations (min/med/95%ile/max ms) from last 10s, 1m:", COLOR_TITLE))
                     .build()
             );
             report.add(text()
@@ -336,7 +339,7 @@ public class HealthModule implements CommandModule {
         report.add(text()
                 .append(text(">", DARK_GRAY, BOLD))
                 .append(space())
-                .append(text("CPU usage from last 10s, 1m, 15m:", GOLD))
+                .append(text("CPU usage from last 10s, 1m, 15m:", COLOR_TITLE))
                 .build()
         );
         report.add(text()
@@ -363,7 +366,7 @@ public class HealthModule implements CommandModule {
         report.add(text()
                 .append(text(">", DARK_GRAY, BOLD))
                 .append(space())
-                .append(text("Memory usage:", GOLD))
+                .append(text("Memory usage:", COLOR_TITLE))
                 .build()
         );
         report.add(text()
@@ -375,7 +378,7 @@ public class HealthModule implements CommandModule {
                 .append(text(FormatUtil.formatBytes(heapUsage.getMax()), WHITE))
                 .append(text("   "))
                 .append(text("(", GRAY))
-                .append(text(FormatUtil.percent(heapUsage.getUsed(), heapUsage.getMax()), GREEN))
+                .append(text(FormatUtil.percent(heapUsage.getUsed(), heapUsage.getMax()), COLOR_HEALTH_GOOD))
                 .append(text(")", GRAY))
                 .build()
         );
@@ -388,7 +391,7 @@ public class HealthModule implements CommandModule {
         report.add(text()
                 .append(text(">", DARK_GRAY, BOLD))
                 .append(space())
-                .append(text("Non-heap memory usage:", GOLD))
+                .append(text("Non-heap memory usage:", COLOR_TITLE))
                 .build()
         );
         report.add(text()
@@ -414,7 +417,7 @@ public class HealthModule implements CommandModule {
             report.add(text()
                     .append(text(">", DARK_GRAY, BOLD))
                     .append(space())
-                    .append(text(memoryPool.getName() + " pool usage:", GOLD))
+                    .append(text(memoryPool.getName() + " pool usage:", COLOR_TITLE))
                     .build()
             );
             report.add(text()
@@ -426,7 +429,7 @@ public class HealthModule implements CommandModule {
                     .append(text(FormatUtil.formatBytes(usage.getMax()), WHITE))
                     .append(text("   "))
                     .append(text("(", GRAY))
-                    .append(text(FormatUtil.percent(usage.getUsed(), usage.getMax()), GREEN))
+                    .append(text(FormatUtil.percent(usage.getUsed(), usage.getMax()), COLOR_HEALTH_GOOD))
                     .append(text(")", GRAY))
                     .build()
             );
@@ -435,7 +438,7 @@ public class HealthModule implements CommandModule {
             if (collectionUsage != null) {
                 report.add(text()
                         .content("     ")
-                        .append(text("-", RED))
+                        .append(text("-", COLOR_HEALTH_BAD))
                         .append(space())
                         .append(text("Usage at last GC:", GRAY))
                         .append(space())
@@ -462,7 +465,7 @@ public class HealthModule implements CommandModule {
                     averagesReport.add(text()
                             .color(GRAY)
                             .content("    ")
-                            .append(FormatUtil.formatBytes(bytesPerSec, GREEN, "/s"))
+                            .append(FormatUtil.formatBytes(bytesPerSec, COLOR_HEALTH_GOOD, "/s"))
                             .append(text(" / "))
                             .append(text(String.format(Locale.ENGLISH, "%,d", packetsPerSec), WHITE))
                             .append(text(" pps "))
@@ -481,7 +484,7 @@ public class HealthModule implements CommandModule {
             report.add(text()
                     .append(text(">", DARK_GRAY, BOLD))
                     .append(space())
-                    .append(text("Network usage: (system, last 15m)", GOLD))
+                    .append(text("Network usage: (system, last 15m)", COLOR_TITLE))
                     .build()
             );
             report.addAll(averagesReport);
@@ -500,7 +503,7 @@ public class HealthModule implements CommandModule {
         report.add(text()
                 .append(text(">", DARK_GRAY, BOLD))
                 .append(space())
-                .append(text("Disk usage:", GOLD))
+                .append(text("Disk usage:", COLOR_TITLE))
                 .build()
         );
         report.add(text()
@@ -512,7 +515,7 @@ public class HealthModule implements CommandModule {
                 .append(text(FormatUtil.formatBytes(total), WHITE))
                 .append(text("   "))
                 .append(text("(", GRAY))
-                .append(text(FormatUtil.percent(used, total), GREEN))
+                .append(text(FormatUtil.percent(used, total), COLOR_HEALTH_GOOD))
                 .append(text(")", GRAY))
                 .build()
         );

@@ -41,16 +41,19 @@ public enum StatisticFormatter {
 
     private static final String BAR_TRUE_CHARACTER = "┃";
     private static final String BAR_FALSE_CHARACTER = "╻";
+    private static final TextColor COLOR_HEALTH_GOOD = TextColor.color(155, 255, 255);
+    private static final TextColor COLOR_HEALTH_MEDIUM = TextColor.color(255, 190, 0);
+    private static final TextColor COLOR_HEALTH_BAD = TextColor.color(255, 20, 20);
 
     public static TextComponent formatTps(double tps, int gameTargetTps) {
         TextColor color;
 
         if (tps > (gameTargetTps * 0.9d)) {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         } else if (tps > (gameTargetTps * 0.8d)) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         }
 
         return text((tps > gameTargetTps ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, gameTargetTps), color);
@@ -71,11 +74,11 @@ public enum StatisticFormatter {
     public static TextComponent formatTickDuration(double duration, int gameMaxIdealDuration) {
         TextColor color;
         if (duration >= gameMaxIdealDuration) {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         } else if (duration >= (gameMaxIdealDuration * 0.8d)) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         }
 
         return text(String.format(Locale.ENGLISH, "%.1f", duration), color);
@@ -84,11 +87,11 @@ public enum StatisticFormatter {
     public static TextComponent formatCpuUsage(double usage) {
         TextColor color;
         if (usage > 0.9) {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         } else if (usage > 0.65) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         }
 
         return text(FormatUtil.percent(usage, 1d), color);
@@ -109,11 +112,11 @@ public enum StatisticFormatter {
     public static TextComponent formatPingRtt(double ping) {
         TextColor color;
         if (ping >= 200) {
-            color = RED;
+            color = COLOR_HEALTH_BAD;
         } else if (ping >= 100) {
-            color = YELLOW;
+            color = COLOR_HEALTH_MEDIUM;
         } else {
-            color = GREEN;
+            color = COLOR_HEALTH_GOOD;
         }
 
         return text((int) Math.ceil(ping), color);
@@ -127,10 +130,10 @@ public enum StatisticFormatter {
         int usedChars = (int) ((used * length) / max);
         int committedChars = (int) ((committed * length) / max);
 
-        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, usedChars)).color(YELLOW);
+        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, usedChars)).color(COLOR_HEALTH_MEDIUM);
         if (committedChars > usedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (committedChars - usedChars) - 1), GRAY));
-            line.append(Component.text(BAR_FALSE_CHARACTER, RED));
+            line.append(Component.text(BAR_FALSE_CHARACTER, COLOR_HEALTH_BAD));
         }
         if (length > committedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (length - committedChars)), GRAY));
@@ -156,15 +159,15 @@ public enum StatisticFormatter {
         int collectionUsedChars = (int) ((collectionUsed * length) / max);
         int committedChars = (int) ((committed * length) / max);
 
-        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, collectionUsedChars)).color(YELLOW);
+        TextComponent.Builder line = text().content(Strings.repeat(BAR_TRUE_CHARACTER, collectionUsedChars)).color(COLOR_HEALTH_MEDIUM);
 
         if (usedChars > collectionUsedChars) {
-            line.append(Component.text(BAR_TRUE_CHARACTER, RED));
-            line.append(text(Strings.repeat(BAR_TRUE_CHARACTER, (usedChars - collectionUsedChars) - 1), YELLOW));
+            line.append(Component.text(BAR_TRUE_CHARACTER, COLOR_HEALTH_BAD));
+            line.append(text(Strings.repeat(BAR_TRUE_CHARACTER, (usedChars - collectionUsedChars) - 1), COLOR_HEALTH_MEDIUM));
         }
         if (committedChars > usedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (committedChars - usedChars) - 1), GRAY));
-            line.append(Component.text(BAR_FALSE_CHARACTER, YELLOW));
+            line.append(Component.text(BAR_FALSE_CHARACTER, COLOR_HEALTH_MEDIUM));
         }
         if (length > committedChars) {
             line.append(text(Strings.repeat(BAR_FALSE_CHARACTER, (length - committedChars)), GRAY));
@@ -182,7 +185,7 @@ public enum StatisticFormatter {
         int freeChars = length - usedChars;
         return text()
                 .append(text("[", DARK_GRAY))
-                .append(text(Strings.repeat(BAR_TRUE_CHARACTER, usedChars), YELLOW))
+                .append(text(Strings.repeat(BAR_TRUE_CHARACTER, usedChars), COLOR_HEALTH_MEDIUM))
                 .append(text(Strings.repeat(BAR_FALSE_CHARACTER, freeChars), GRAY))
                 .append(text("]", DARK_GRAY))
                 .build();
